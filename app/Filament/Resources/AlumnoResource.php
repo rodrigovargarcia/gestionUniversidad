@@ -17,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
 use App\Models\Carrera;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Validation\Rule;
 
 
 class AlumnoResource extends Resource
@@ -30,23 +31,48 @@ class AlumnoResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nombre')
-                ->label('Nombre'),
+                ->label('Nombre')
+                ->rules([
+                    'required',
+                ]),
                 TextInput::make('apellido')
-                ->label('Apellido'),
+                ->label('Apellido')
+                ->rules([
+                    'required',
+                ]),
                 TextInput::make('dni')
-                ->numeric(),
+                ->numeric()
+                ->rules([
+                    'numeric',
+                    'required',
+                    Rule::unique('alumno', 'dni'),
+                ]),
                 TextInput::make('telefono')
-                ->label('Teléfono'),
+                ->label('Teléfono')
+                ->rules([
+                    'required',
+                ]),
                 TextInput::make('legajo')
-                ->numeric(),
+                ->numeric()
+                ->rules([
+                    'numeric',
+                    'required' ,
+                    Rule::unique('alumno', 'legajo'),
+                ]),
                 Select::make('estado')
                 ->label('Estado')
+                ->rules([
+                    'required',
+                ])
                 ->options([
                     'activo' => 'Activo',
                     'inactivo' => 'Inactivo',
                 ]),
                 Select::make('carrera_id')
                 ->label('Carrera')
+                ->rules([
+                    'required',
+                ])
                 ->options(Carrera::all()->pluck('nombre','id')),                
             ]);
     }

@@ -20,6 +20,8 @@ use App\Models\Alumno;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\SelectFilter;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use Filament\Tables\Filters\Filter;
+use Carbon\Carbon;
 
 class RegistroMateriaPorAlumnoResource extends Resource
 {
@@ -33,26 +35,33 @@ class RegistroMateriaPorAlumnoResource extends Resource
             ->schema([
                 Select::make('materia_id')
                 ->label('Materia')
+                ->rules([
+                    'required',
+                ])
                 ->options(Materia::all()->pluck('nombre_materia', 'id')),
                 Select::make('alumno_id')
                 ->label('Alumno')
+                ->rules([
+                    'required',
+                ])
                 ->options(Alumno::all()->pluck('nombre', 'id')),
                 Select::make('estado')
                 ->label('Estado')
+                ->rules([
+                    'required',
+                ])
                 ->options([
                     'aprobado' => 'Aprobado',
                     'desaprobado' => 'Desaprobado',
                     'regular' => 'Regular',
                     'libre' => 'Libre',
                 ]),
-                DatePicker::make('fecha'),
+                DatePicker::make('fecha')
+                ->rules([
+                    'required',
+                ]),
             ]);
     }
-
-    // $table->foreignId('materia_id')->constrained('materia')->onDelete('cascade');
-    // $table->foreignId('alumno_id')->constrained('alumno')->onDelete('cascade');
-    // $table->enum('estado',['aprobado', 'desaprobado', 'regular', 'libre']);
-    // $table->date('fecha');
 
     public static function table(Table $table): Table
     {
@@ -78,6 +87,35 @@ class RegistroMateriaPorAlumnoResource extends Resource
                     'regular' => 'Regular',
                     'libre' => 'Libre',
                 ]),
+                Filter::make('fecha')
+                    ->form([
+                        Forms\Components\DatePicker::make('Desde'),
+                        Forms\Components\DatePicker::make('Hasta'),
+                    ])
+                    ->indicateUsing(function (array $data): array {
+                        $indicators = [];
+                 
+                        if ($data['Desde'] ?? null) {
+                            $indicators['from'] = 'Desde el ' . Carbon::parse($data['Desde'])->toFormattedDateString();
+                        }
+                 
+                        if ($data['Hasta'] ?? null) {
+                            $indicators['until'] = 'Hasta el ' . Carbon::parse($data['Hasta'])->toFormattedDateString();
+                        }
+                 
+                        return $indicators;
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['Desde'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('fecha', '>=', $date),
+                            )
+                            ->when(
+                                $data['Hasta'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('fecha', '<=', $date),
+                            );
+                    })               
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

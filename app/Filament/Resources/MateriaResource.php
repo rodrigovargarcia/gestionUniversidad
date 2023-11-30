@@ -28,18 +28,30 @@ class MateriaResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nombre_materia')
-                ->label('Materia'),
+                ->label('Materia')
+                ->rules([
+                    'required',
+                ]),
                 TextInput::make('horas_cursado')
                 ->numeric()
-                ->label('Cantidad de horas de cursado'),
+                ->label('Cantidad de horas de cursado')
+                ->rules([
+                    'required',
+                ]),
                 Select::make('duracion')
                 ->label('Cursado')
+                ->rules([
+                    'required',
+                ])
                 ->options([
                     'cuatrimestral' => 'Cuatrimestral',
                     'anual' => 'Anual',
                 ]),
                 Select::make('carrera_id')
                 ->label('Carrera')
+                ->rules([
+                    'required',
+                ])
                 ->options(Carrera::all()->pluck('nombre','id')),
             ]);
     }

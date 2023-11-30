@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
-
+use Illuminate\Validation\Rule;
 
 
 class CarreraResource extends Resource
@@ -28,9 +28,15 @@ class CarreraResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nombre')
-                ->label('Nombre de la carrera'),
+                ->label('Nombre de la carrera')
+                ->rules([
+                    'required',
+                ]),
                 TextInput::make('duracion_anios')
-                ->label('Años de duracion'),
+                ->label('Años de duracion')
+                ->rules([
+                    'required',
+                ]),
             ]);
     }
 
