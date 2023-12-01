@@ -19,6 +19,8 @@ class VerifyCsrfToken extends Middleware
         'materia',
         'materia/*',
         'registro',
-        'registro/*'
+        'registro/*',
+        'usuarios',
+        'usuario/*'
     ];
 }

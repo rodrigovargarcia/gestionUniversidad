@@ -5,6 +5,8 @@ use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\AlumnoController;
 use App\Http\Controllers\MateriaController;
 use App\Http\Controllers\RegistroMateriaPorAlumnoController;
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -64,3 +66,13 @@ Route::get('registros', [App\Http\Controllers\RegistroMateriaPorAlumnoController
 Route::get('registro/{registro}', [App\Http\Controllers\RegistroMateriaPorAlumnoController::class, 'show']);
 
 Route::post('registro', [App\Http\Controllers\RegistroMateriaPorAlumnoController::class, 'store']);
+
+// Routes User
+
+Route::get('usuarios', [App\Http\Controllers\UserController::class, 'index']);
+
+Route::post('usuario', [App\Http\Controllers\UserController::class, 'store']);
+
+Route::get('usuario/{usuario}', [App\Http\Controllers\UserController::class, 'show']);
+
+Route::delete('usuario/{usuario}', [App\Http\Controllers\UserController::class, 'destroy']);
