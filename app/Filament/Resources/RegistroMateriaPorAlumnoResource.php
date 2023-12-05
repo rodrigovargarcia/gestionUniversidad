@@ -27,7 +27,8 @@ class RegistroMateriaPorAlumnoResource extends Resource
 {
     protected static ?string $model = RegistroMateriaPorAlumno::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-folder';
+    protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form
     {
@@ -119,6 +120,7 @@ class RegistroMateriaPorAlumnoResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
